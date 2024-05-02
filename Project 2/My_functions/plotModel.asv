@@ -1,0 +1,120 @@
+function plotModel(x,y,varargin)
+
+ 
+
+[Nx,nx] = size(x);
+X = x;
+
+if sum(x(:,1)) == Nx
+    X(:,1) = [];
+    nx = nx - 1;
+end
+
+scatter(X,y) % Plots points
+hold on
+
+for m = 1:length(varargin)
+    model = varargin{m};
+
+    if isequal(model.model,'LR') || isequal(model.model,'POLY')
+
+        if nx == 1
+
+         
+            X1 = linspace(1,10,1000);
+            plot(X1,polyval(flipud(model.theta),X1)) % Plots regression
+
+
+            % Should generate data for uncertainty
+            % I dont know if i have done this correctly or what to do with
+            % the data i get
+
+%             theta_k = zeros(length(model.theta),1000);
+%             for i = 1:1000
+%                 e = y - evalModel(model, x);
+%                 V = e' * (eye(Nx) - X * (X' * X)^-1 * X') * e;
+%                 lambda2 = V / (Nx - nx); % Removed the incorrect 1/2 factor
+%                 P = lambda2 * (X' * X)^-1;
+%                 Phalf = sqrtm(P);
+%                 chi2 = chi2inv(0.95, nx);
+%                 Delta_theta = randn(nx, 1);
+%                 Delta_theta = Delta_theta / norm(Delta_theta) * sqrt(chi2);
+%                 theta_k(:,i) = model.theta + Phalf * Delta_theta;
+%                 model.theta;
+%             end
+% 
+%             if size(theta_k,2) > 1 && isequal(model.model,'POLY')
+%                 [~, rowIndexMin] = min(sum(theta_k));
+%                 [~, rowIndexMax] = max(sum(theta_k));
+%                 y_min = model.x * theta_k(:,rowIndexMin);
+%                 y_max = model.x * theta_k(:,rowIndexMax);
+%                 y_test = model.x * model.theta;
+%             else
+%                 y_min = X * min(theta_k);
+%                 y_max = X * max(theta_k);
+% 
+%             end
+
+
+            %             plot(x,y_min,'b')
+            %             plot(x,y_max,'r')
+            %             X = [x; flipud(x)]; % Note the semicolon to create a column vector
+            %             Y = [y_min; flipud(y_max)]; % Concatenate y_min with flipped y_max
+            %             fill(X, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
+
+
+
+        elseif nx == 2
+
+            %             [b, a] = model.theta;
+            %             c = 1; % Assuming for simplicity
+            %             d = -mean(y); % Calculate d based on the mean of Z-values
+            %
+            %             % Define a grid for the plane over X and Y
+            %             [xGrid, yGrid] = meshgrid(linspace(min(x(:,1)), max(x(:,2)), length(x)), linspace(min(x(:,2)), max(x(:,2)), length(x)));
+            %
+            %             % Solve the plane equation for Z
+            %             zGrid = (-d - a * xGrid - b * yGrid) / c;
+            %
+            %             % Plot points
+            %
+            %             scatter3(x(:,1), x(:,2), y, 'filled'); % Plot scatter points
+            %             hold on;
+            %
+            %             % Plot regression
+            %             surf(xGrid, yGrid, zGrid, 'FaceAlpha', 0.5, 'EdgeColor', 'none');
+            %             hold off
+
+
+            
+
+        else
+            disp('Can only plot for dimensions 1 and 2')
+        end
+
+    end
+
+    if isequal(model.model,'KNN')
+
+
+        if nx == 1
+
+           
+
+            stairs(x,evalModel(model,x))
+
+
+        end
+
+
+
+
+    end
+
+
+
+
+end
+end
+
+

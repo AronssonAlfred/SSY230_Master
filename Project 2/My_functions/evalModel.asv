@@ -1,0 +1,36 @@
+function y_pred = evalModel(model, x)
+
+[Nx,~] = size(x);
+
+% Seems to work fine
+if isequal(model.model,'LR')
+
+    y_pred = x*model.theta;
+
+% Seems to not work fine
+elseif isequal(model.model, 'KNN')
+    % For each input regressor, find the k closest regressors in the KNN model
+    y_pred = zeros(Nx, 1);
+
+    for i = 1:Nx
+    % Calculate the distance from the i-th input regressor to all training regressors
+    distances = sqrt(sum((model.x - x(i, :)).^2, 2));
+    
+    % Sort the distances and get the indices of the k smallest distances
+    [sortedDistances, sortedIndices] = sort(distances);
+    
+    % Select the k nearest neighbors, excluding the first one if it's the point itself
+    nearestNeighbours = sortedIndices(1:model.k);
+    
+    % Calculate the mean of the corresponding outputs
+    y_pred(i) = mean(model.y(nearestNeighbours));
+    end
+elseif isequal(model.model,'POLY')
+
+    y_pred = model.x * model.theta;
+
+else
+    error('Unknown model type');
+end
+
+end

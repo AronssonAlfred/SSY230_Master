@@ -1,0 +1,7 @@
+function transfer = id2tf(arx)
+
+    A = [arx.theta(1:arx.na+1)];
+    B = [arx.theta(arx.na+2:end)];
+    transfer = tf(idpoly(A,B));
+    
+end 
