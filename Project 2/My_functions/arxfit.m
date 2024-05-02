@@ -15,8 +15,11 @@ function model = arxfit(z, n)
     
     % Store the results in a structured array
     model.theta = [lrmodel.theta];
+    model.model = lrmodel.model;
+    model.variance = lrmodel.variance;
     model.type = 'ARX';
     model.na = na;
     model.nb = nb;
+    model.nk = nk;
     model.phi = phi;
 end

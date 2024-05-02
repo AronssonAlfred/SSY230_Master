@@ -1,17 +1,9 @@
 function plotModel(x,y,varargin)
 
- 
+
 
 [Nx,nx] = size(x);
 X = x;
-
-if sum(x(:,1)) == Nx
-    X(:,1) = [];
-    nx = nx - 1;
-end
-
-scatter(X,y) % Plots points
-hold on
 
 for m = 1:length(varargin)
     model = varargin{m};
@@ -20,73 +12,45 @@ for m = 1:length(varargin)
 
         if nx == 1
 
-         
-            X1 = linspace(1,10,1000);
-            plot(X1,polyval(flipud(model.theta),X1)) % Plots regression
+            plot(x,y)
+            hold on
 
 
-            % Should generate data for uncertainty
-            % I dont know if i have done this correctly or what to do with
-            % the data i get
+            if length(varargin)==1
 
-%             theta_k = zeros(length(model.theta),1000);
-%             for i = 1:1000
-%                 e = y - evalModel(model, x);
-%                 V = e' * (eye(Nx) - X * (X' * X)^-1 * X') * e;
-%                 lambda2 = V / (Nx - nx); % Removed the incorrect 1/2 factor
-%                 P = lambda2 * (X' * X)^-1;
-%                 Phalf = sqrtm(P);
-%                 chi2 = chi2inv(0.95, nx);
-%                 Delta_theta = randn(nx, 1);
-%                 Delta_theta = Delta_theta / norm(Delta_theta) * sqrt(chi2);
-%                 theta_k(:,i) = model.theta + Phalf * Delta_theta;
-%                 model.theta;
-%             end
-% 
-%             if size(theta_k,2) > 1 && isequal(model.model,'POLY')
-%                 [~, rowIndexMin] = min(sum(theta_k));
-%                 [~, rowIndexMax] = max(sum(theta_k));
-%                 y_min = model.x * theta_k(:,rowIndexMin);
-%                 y_max = model.x * theta_k(:,rowIndexMax);
-%                 y_test = model.x * model.theta;
-%             else
-%                 y_min = X * min(theta_k);
-%                 y_max = X * max(theta_k);
-% 
-%             end
+                % Assuming you have `theta_hat` (your estimated parameter vector) and `P` (the covariance matrix of `theta_hat`)
+                n_samples = 20; % Number of samples for the Monte Carlo simulation
+                d = length(model.theta); % Dimension of the parameter space
+                confidence_level = 0.95; % Typically for a 95% confidence interval
+                chi_sq_value = chi2inv(confidence_level, d); % Chi-squared value for the confidence level
 
+                % Preallocate arrays to store parameter samples and function evaluations
+                f_evals = zeros(length(X), n_samples); % Assuming x is a vector of input features
 
-            %             plot(x,y_min,'b')
-            %             plot(x,y_max,'r')
-            %             X = [x; flipud(x)]; % Note the semicolon to create a column vector
-            %             Y = [y_min; flipud(y_max)]; % Concatenate y_min with flipped y_max
-            %             fill(X, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
+                % Generate parameter samples and corresponding function evaluations
+                for i = 1:n_samples
+                    Delta_theta = randn(d, 1);
+                    Delta_theta = Delta_theta / norm(Delta_theta) * sqrt(chi_sq_value);
+                    theta_k = model.theta + sqrtm(model.variance) * Delta_theta; % Adjust the estimated parameter
+                    model_sample = model;
+                    model_sample.theta = theta_k;
 
+                    f = zeros(length(y),1);
+                    f(end-length(model.phi)+1:end) = model_sample.phi*model_sample.theta;
 
+                    f_evals(:, i) = f; % Evaluate the function for the k-th sample
+                end
 
-        elseif nx == 2
+                % Calculate upper and lower bounds of the function evaluations
+                f_max = max(f_evals, [], 2);
+                f_min = min(f_evals, [], 2);
 
-            %             [b, a] = model.theta;
-            %             c = 1; % Assuming for simplicity
-            %             d = -mean(y); % Calculate d based on the mean of Z-values
-            %
-            %             % Define a grid for the plane over X and Y
-            %             [xGrid, yGrid] = meshgrid(linspace(min(x(:,1)), max(x(:,2)), length(x)), linspace(min(x(:,2)), max(x(:,2)), length(x)));
-            %
-            %             % Solve the plane equation for Z
-            %             zGrid = (-d - a * xGrid - b * yGrid) / c;
-            %
-            %             % Plot points
-            %
-            %             scatter3(x(:,1), x(:,2), y, 'filled'); % Plot scatter points
-            %             hold on;
-            %
-            %             % Plot regression
-            %             surf(xGrid, yGrid, zGrid, 'FaceAlpha', 0.5, 'EdgeColor', 'none');
-            %             hold off
-
-
-            
+                plot(X,f_min,'b')
+                plot(X,f_max,'r')
+                Xr = [X; flipud(X)]; % Note the semicolon to create a column vector
+                Y = [f_min; flipud(f_max)]; % Concatenate y_min with flipped y_max
+                fill(Xr, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
+             end
 
         else
             disp('Can only plot for dimensions 1 and 2')
@@ -94,25 +58,7 @@ for m = 1:length(varargin)
 
     end
 
-    if isequal(model.model,'KNN')
-
-
-        if nx == 1
-
-           
-
-            stairs(x,evalModel(model,x))
-
-
-        end
-
-
-
-
-    end
-
-
-
+    
 
 end
 end
