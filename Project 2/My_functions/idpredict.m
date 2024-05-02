@@ -9,7 +9,7 @@ function y_pred = idpredict(model, z, horizon)
 
         phi(:,1) = []; % Why the fuck is that even there?
 
-         y_pred(end-length(phi)+1:end) = phi*model.theta;
+        y_pred(end-length(phi)+1:end) = phi*model.theta;
         
         z(:,1) = y_pred; % Prediction as base for future predictions
         % is u also soppused to be uptaded? How?
