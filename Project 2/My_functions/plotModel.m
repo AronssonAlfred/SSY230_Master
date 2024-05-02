@@ -5,6 +5,8 @@ function plotModel(x,y,varargin)
 [Nx,nx] = size(x);
 X = x;
 
+t = (0:length(x)-1);
+
 for m = 1:length(varargin)
     model = varargin{m};
 
@@ -12,7 +14,7 @@ for m = 1:length(varargin)
 
         if nx == 1
 
-            plot(x,y)
+            plot(t,y)
             hold on
 
 
@@ -34,6 +36,11 @@ for m = 1:length(varargin)
                     theta_k = model.theta + sqrtm(model.variance) * Delta_theta; % Adjust the estimated parameter
                     model_sample = model;
                     model_sample.theta = theta_k;
+
+                    phi = uy2phi([y x], [model.na, model.nb, model.nb]);
+                    phi(:,1) = [];
+                    model_sample.phi = phi;
+                    
 
                     f = zeros(length(y),1);
                     f(end-length(model.phi)+1:end) = model_sample.phi*model_sample.theta;
@@ -62,5 +69,3 @@ for m = 1:length(varargin)
 
 end
 end
-
-

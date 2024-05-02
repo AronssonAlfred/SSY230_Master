@@ -2,7 +2,7 @@ function idcompare(model, z, horizon)
 
 
 
-    t = (1:length(z))';
+    t = (0:length(z)-1)';
 
     y_pred = idpredict(model, z, horizon);
     y_sim = idsimulate(model, z(:,2));
@@ -21,7 +21,7 @@ function idcompare(model, z, horizon)
     subplot(2,1,2)
     plot(t,z(:,1))
     hold on
-    plotModel(t,y_sim,model)
+    plotModel(z(:,2),y_sim,model)
     title('Simulation')
     legend('Meassured', 'Simulated', '','','Uncertainty')
 
