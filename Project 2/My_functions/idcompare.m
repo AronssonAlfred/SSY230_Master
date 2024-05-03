@@ -14,7 +14,7 @@ function idcompare(model, z, horizon)
     hold on
     plotModel(t,y_pred,model)
     title('Prediction')
-    legend('Meassured', 'Predicted','','', 'Uncertainty')
+    %legend('Meassured', 'Predicted','','', 'Uncertainty')
     hold off
 
     % Simulation plot
@@ -23,7 +23,7 @@ function idcompare(model, z, horizon)
     hold on
     plotModel(z(:,2),y_sim,model)
     title('Simulation')
-    legend('Meassured', 'Simulated', '','','Uncertainty')
+    %legend('Meassured', 'Simulated', '','','Uncertainty')
 
 
 

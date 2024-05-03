@@ -5,7 +5,7 @@ function plotModel(x,y,varargin)
 [Nx,nx] = size(x);
 X = x;
 
-t = (0:length(x)-1);
+t = (0:length(x)-1)';
 
 for m = 1:length(varargin)
     model = varargin{m};
@@ -52,10 +52,11 @@ for m = 1:length(varargin)
                 f_max = max(f_evals, [], 2);
                 f_min = min(f_evals, [], 2);
 
-                plot(X,f_min,'b')
-                plot(X,f_max,'r')
-                Xr = [X; flipud(X)]; % Note the semicolon to create a column vector
+                plot(t,f_min,'b')
+                plot(t,f_max,'r')
+                Xr = [t; flipud(t)]; % Note the semicolon to create a column vector
                 Y = [f_min; flipud(f_max)]; % Concatenate y_min with flipped y_max
+   
                 fill(Xr, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
              end
 
