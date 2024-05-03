@@ -45,7 +45,7 @@ model.theta;
 %    -0.5004
 %     0.2366
 
-idpredict(model,[y u],1);
+idpredict(model,[y u],1)
 
 %          0
 %     2.3146
@@ -55,7 +55,7 @@ idpredict(model,[y u],1);
 %    -0.5496
 %     1.7105
 
-idpredict(model,[y u],3);
+idpredict(model,[y u],3)
 
 %          0
 %          0
