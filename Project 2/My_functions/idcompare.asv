@@ -1,5 +1,6 @@
 function idcompare(model, z, horizon)
 
+
 % Define variables needed
 t = (1:length(z))';
 y_pred = idpredict(model, z, horizon);
@@ -13,9 +14,9 @@ figure;% Initialize subplots
 
 % Prediction subplot
 subplot(2,1,1)
-plot(t,z(:,1)) % Plot meassured y
+plot(t,z(:,1))
 hold on
-plot(t,y_pred); % Plot predicted y
+plot(t,y_pred); % Plot prediction
 
 % Uncertainty algorithm for prediction 
 
@@ -41,41 +42,21 @@ Xr = [t; flipud(t)]; % Note the semicolon to create a column vector
 Y = [f_min; flipud(f_max)]; % Concatenate y_min with flipped y_max
 fill(Xr, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
 title('Prediction')
-legend('Meassured', 'Predicted','','', 'Uncertainty','Location', 'Best')
+%legend('Meassured', 'Predicted','','', 'Uncertainty')
 hold off
 
 % Simulation plot
 subplot(2,1,2)
-plot(t,z(:,1)) % Plot meassured y
+plot(t,z(:,1))
 hold on
-plot(t,y_sim) % Plot simulated y
-
-
-% Uncertainty algorithm for Simulation
-
-% Preallocate arrays to store parameter samples and function evaluations
-f_evals = zeros(length(z), n_samples);
-
-% Generate parameter samples and corresponding function evaluations
-for i = 1:n_samples
-    Delta_theta = randn(d, 1);
-    Delta_theta = Delta_theta / norm(Delta_theta) * sqrt(chi_sq_value);
-    theta_k = model.theta + sqrtm(model.variance) * Delta_theta; % Adjust the estimated parameter
-    model_sample = model;
-    model_sample.theta = theta_k;
-    f_evals(:, i) = idsimulate(model_sample, z(:,2)); % Evaluate the function for the k-th sample
-end
-
-% Calculate upper and lower bounds of the function evaluations
-f_max = max(f_evals, [], 2);
-f_min = min(f_evals, [], 2);
-plot(t,f_min,'b')
-plot(t,f_max,'r')
-Xr = [t; flipud(t)]; % Note the semicolon to create a column vector
-Y = [f_min; flipud(f_max)]; % Concatenate y_min with flipped y_max
-fill(Xr, Y, 'g', 'FaceAlpha', 0.1, 'EdgeColor', 'none'); % Fill with green color and 10% opacity
-hold off
+plotModel(z(:,2),y_sim,model)
 title('Simulation')
-legend('Meassured', 'Simulated','','','Uncertainty','Location', 'Best')
+%legend('Meassured', 'Simulated', '','','Uncertainty')
+
+
+
+
+
+
 
 end

@@ -10,7 +10,7 @@ for m = 1:length(varargin)
     if length(varargin)==1
 
         % Assuming you have `theta_hat` (your estimated parameter vector) and `P` (the covariance matrix of `theta_hat`)
-        n_samples = 2000; % Number of samples for the Monte Carlo simulation
+        n_samples = 20; % Number of samples for the Monte Carlo simulation
         d = length(model.theta); % Dimension of the parameter space
         confidence_level = 0.95; % Typically for a 95% confidence interval
         chi_sq_value = chi2inv(confidence_level, d); % Chi-squared value for the confidence level
@@ -26,7 +26,7 @@ for m = 1:length(varargin)
             model_sample = model;
             model_sample.theta = theta_k;
             zero = max(model.na, model.nb + model.nk - 1);
-            phi = uy2phi([zeros(zero,2); [y x]], [model.na, model.nb, model.nk]);
+            phi = uy2phi([zeros(zero,2); [y x]], [model.na, model.nb, model.nb]);
             phi(:,1) = [];
             model_sample.phi = phi;
             f_evals(:, i) = model_sample.phi*model_sample.theta; % Evaluate the function for the k-th sample
