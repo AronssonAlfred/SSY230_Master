@@ -65,7 +65,7 @@ idpredict(model,[y u],3)
 %    -0.2234
 %     0.5249
 
-ysim=idsimulate(model,u)
+ysim=idsimulate(model,u);
 
 %          0
 %          0
@@ -79,4 +79,4 @@ ysim=idsimulate(model,u)
 
 idcompare(model,[y u],2);
 
-%idcompare(model,[y u],Inf);
+%idcompare(model,[y u],20);
