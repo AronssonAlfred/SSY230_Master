@@ -28,7 +28,7 @@ uy2phi([y u],[1 2 2]);
 % %      9     8     2     1
 % %     -1     9     3     2
 % 
- uy2phi([y u],[3 2 2])
+ uy2phi([y u],[3 2 2]);
 %      9     8     7     6     2     1
 %     -1     9     8     7     3     2
 
@@ -39,13 +39,13 @@ y=[2 -2 -3 -4 -2 0 1]';
 % Your estimate should be
 model=arxfit([y u],[2 1 2]);
 
-model.theta
+model.theta;
 % 
 %     1.1573
 %    -0.5004
 %     0.2366
 
-idpredict(model,[y u],1)
+idpredict(model,[y u],1);
 
 %          0
 %     2.3146
