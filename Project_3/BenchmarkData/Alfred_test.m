@@ -2,17 +2,35 @@
 close all; clear; clc
 
 % Load files with input data and validation data
-ESTIM = load('F16Data_FullMSine_Level3.mat'); 
-VALI = load('F16Data_FullMSine_Level2_Validation.mat');
+ESTIM1 = load('F16Data_FullMSine_Level3.mat'); 
+VALI1 = load('F16Data_FullMSine_Level2_Validation.mat');
+
+ESTIM2 = load('F16Data_FullMSine_Level5.mat'); 
+VALI2 = load('F16Data_FullMSine_Level4_Validation.mat');
+
+ESTIM3 = load('F16Data_FullMSine_Level7.mat'); 
+VALI3 = load('F16Data_FullMSine_Level6_Validation.mat');
 
 %% Consider SISO-case with force as input and acceleration at node 1 as output
 
 % Estimation data
-output_ESTIM = ESTIM.Acceleration(1,:)';
-input_ESTIM = ESTIM.Force';
+output_ESTIM1 = ESTIM1.Acceleration(1,:)';
+input_ESTIM1 = ESTIM1.Voltage';
+
+output_ESTIM2 = ESTIM2.Acceleration(1,:)';
+input_ESTIM2 = [ESTIM2.Force', ESTIM2.Voltage'];
+
+output_ESTIM3 = ESTIM3.Acceleration(1,:)';
+input_ESTIM3 = [ESTIM3.Force', ESTIM3.Voltage'];
 
 % Validation data
-output_VALI = VALI.Acceleration(1,:)';
-input_VALI = VALI.Force';
+output_VALI1 = VALI1.Acceleration(1,:)';
+input_VALI1 = VALI1.Voltage';
+
+output_VALI2 = VALI2.Acceleration(1,:)';
+input_VALI2 = [VALI2.Force', VALI2.Voltage'];
+
+output_VALI3 = VALI3.Acceleration(1,:)';
+input_VALI3 = [VALI3.Force', VALI3.Voltage'];
 
 systemIdentification
